@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 
   } catch (err) {
     res.status(500).json(err);
-  }
+  };
 });
 
 router.get('/:id', async (req, res) => {
@@ -30,11 +30,11 @@ router.get('/:id', async (req, res) => {
       res.status(200).json(categoryData);
     } else {
       res.status(400).json({message: "No category with that id"});
-    }
+    };
 
   } catch (err) {
     res.status(500).json(err);
-  }
+  };
 });
 
 router.post('/', async (req, res) => {
@@ -50,13 +50,13 @@ router.post('/', async (req, res) => {
     
     if(req.body.category_name == null) {
       res.status(400).json({message: "Could not create that category with that json input"});
-    }
+    } else {
+      res.status(200).json(categoryData);
+    };
     
-    res.status(200).json(categoryData);
-
   } catch (err) {
     res.status(500).json(err);
-  }
+  };
 });
 
 router.put('/:id', async (req, res) => {
@@ -65,7 +65,6 @@ router.put('/:id', async (req, res) => {
   /* req.body should look like this:
         {"category_name": "Sports Equipment"}
    */
-
   try {
     const categoryData = await Category.findByPk(req.params.id,{
       include: [{model: Product}]
