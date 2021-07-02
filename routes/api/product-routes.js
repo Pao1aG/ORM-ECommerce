@@ -117,7 +117,7 @@ router.delete('/:id', async (req, res) => {
   // delete one product by its `id` value
   try {
     const productData = await Product.findByPk(req.params.id, {
-      include:  [{model: Category}, {model: Tag}]
+      include: [{model: Category}, {model: Tag}]
     });
 
     if(productData.id == req.params.id) {
