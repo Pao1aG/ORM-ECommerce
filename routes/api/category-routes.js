@@ -37,7 +37,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   // create a new category
   /* req.body should look like this:
         {category_name: "Sports"}
@@ -46,11 +46,13 @@ router.post('/', (req, res) => {
   try{
     console.log(req.body);
   
-    Category.create(req.body).then(function(category){
-      res.status(200).json(category)
-    });
+    const categoryData = await Category.create(req.body);
     
-    res.status(400).json({message: "Could not create that category with that json input"});
+    if(req.body == null) {
+      res.status(400).json({message: "Could not create that category with that json input"});
+    }
+    
+    res.status(200).json(categoryData);
 
   } catch (err) {
     res.status(500).json(err);
@@ -61,7 +63,7 @@ router.put('/:id', async (req, res) => {
   // update a category by its `id` value
 
   /* req.body should look like this:
-        {category_name: "Sports Equipment"}
+        {"category_name": "Sports Equipment"}
    */
 
   try {
@@ -76,11 +78,13 @@ router.put('/:id', async (req, res) => {
           id: req.params.id,
         },
       });
-
-      res.status(200).json(categoryData);
     };
    
-    res.status(400).json({message: "No category with that id"});
+    if(!categoryData) {
+      res.status(400).json({message: "No category with that id"});
+    };
+
+    res.status(200).json(categoryData);
 
   } catch (err) {
     res.status(500).json(err);
@@ -95,17 +99,21 @@ router.delete('/:id', async (req, res) => {
     });
     
     if(categoryData.id == req.params.id) {
-    //need to also destroy the category id of products that may have this
+    //need to also destroy the category id of products that may have this category id
 
       Category.destroy({
         where: {
           id: req.params.id,
         },
       });
-      res.status(200).json(categoryData);
+      
     };
    
-    res.status(400).json({message: "No category with that id"});
+    if(!categoryData) {
+      res.status(400).json({message: "No category with that id"});
+    }
+
+    res.status(200).json(categoryData);
 
   } catch (err) {
     res.status(500).json(err);
