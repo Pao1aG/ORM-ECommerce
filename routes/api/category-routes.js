@@ -28,9 +28,9 @@ router.get('/:id', async (req, res) => {
 
     if(categoryData.id == req.params.id) {
       res.status(200).json(categoryData);
+    } else {
+      res.status(400).json({message: "No category with that id"});
     }
-
-    res.status(400).json({message: "No category with that id"});
 
   } catch (err) {
     res.status(500).json(err);
@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
   
     const categoryData = await Category.create(req.body);
     
-    if(req.body == null) {
+    if(req.body.category_name == null) {
       res.status(400).json({message: "Could not create that category with that json input"});
     }
     
@@ -72,7 +72,6 @@ router.put('/:id', async (req, res) => {
     });
     
     if(categoryData.id == req.params.id) {
-    
       Category.update(req.body, {
         where: {
           id: req.params.id,
@@ -111,13 +110,13 @@ router.delete('/:id', async (req, res) => {
    
     if(!categoryData) {
       res.status(400).json({message: "No category with that id"});
-    }
-
-    res.status(200).json(categoryData);
+    } else {
+      res.status(200).json(categoryData);
+    };
 
   } catch (err) {
     res.status(500).json(err);
-  }
+  };
 });
 
 
